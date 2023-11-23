@@ -1,0 +1,98 @@
+-- Create a new database
+CREATE DATABASE mydatabase;
+
+-- Switch to the newly created database
+USE mydatabase;
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Create Roles Table
+CREATE TABLE Roles (
+    Role_ID INT PRIMARY KEY,
+    Role_Name VARCHAR(255) NOT NULL
+);
+
+-- Create Users Table
+CREATE TABLE Users (
+    User_ID INT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Role_ID INT,
+    FOREIGN KEY (Role_ID) REFERENCES Roles(Role_ID)
+);
+
+-- Create Auctions Table
+CREATE TABLE Auctions (
+    Auction_ID INT PRIMARY KEY,
+    Seller_ID INT,
+    Auction_Title VARCHAR(255) NOT NULL,
+    Start_Date DATETIME NOT NULL,
+    End_Date DATETIME NOT NULL,
+    Status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (Seller_ID) REFERENCES Users(User_ID)
+);
+
+-- Create Bids Table
+CREATE TABLE Bids (
+    Bid_ID INT PRIMARY KEY,
+    Auction_ID INT,
+    Bidder_ID INT,
+    Bid_Amount DECIMAL(10, 2) NOT NULL,
+    Bid_Date DATETIME NOT NULL,
+    FOREIGN KEY (Auction_ID) REFERENCES Auctions(Auction_ID),
+    FOREIGN KEY (Bidder_ID) REFERENCES Users(User_ID)
+);
+
+-- Create Items Table
+CREATE TABLE Items (
+    Item_ID INT PRIMARY KEY,
+    Auction_ID INT,
+    Item_Name VARCHAR(255) NOT NULL,
+    Item_Description TEXT,
+    Starting_Price DECIMAL(10, 2) NOT NULL,
+    Image_URL VARCHAR(255),
+    FOREIGN KEY (Auction_ID) REFERENCES Auctions(Auction_ID)
+);
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Insert sample data into Roles Table
+INSERT INTO Roles (Role_ID, Role_Name) VALUES
+(1, 'Admin'),
+(2, 'Seller'),
+(3, 'Bidder');
+
+-- Insert sample data into Users Table
+INSERT INTO Users (User_ID, Username, Password, Email, Role_ID) VALUES
+(1, 'admin_user', 'admin_password', 'admin@example.com', 1),
+(2, 'seller_user', 'seller_password', 'seller@example.com', 2),
+(3, 'bidder_user', 'bidder_password', 'bidder@example.com', 3);
+
+-- Insert sample data into Auctions Table
+INSERT INTO Auctions (Auction_ID, Seller_ID, Auction_Title, Start_Date, End_Date, Status) VALUES
+(1, 2, 'laweda', '2023-01-01 12:00:00', '2023-01-10 18:00:00', 'Open'),
+(2, 2, 'lassan', '2023-02-05 09:00:00', '2023-02-15 15:00:00', 'Closed'),
+(3, 3, 'dickl', '2023-03-10 14:00:00', '2023-03-20 20:00:00', 'Completed');
+
+-- Insert sample data into Bids Table
+INSERT INTO Bids (Bid_ID, Auction_ID, Bidder_ID, Bid_Amount, Bid_Date) VALUES
+(1, 1, 3, 150.00, '2023-01-05 14:30:00'),
+(2, 1, 3, 180.00, '2023-01-08 10:45:00'),
+(3, 2, 3, 200.00, '2023-02-10 16:20:00');
+
+-- Insert sample data into Items Table
+INSERT INTO Items (Item_ID, Auction_ID, Item_Name, Item_Description, Starting_Price, Image_URL) VALUES
+(1, 1, 'Smartphone', 'Brand new smartphone', 100.00, 'image1.jpg'),
+(2, 1, 'Laptop', 'High-performance laptop', 150.00, 'image2.jpg'),
+(3, 2, 'Oil Painting', 'Original art piece', 50.00, 'image3.jpg');
+-------------------------------------------------------------------------------------------------------------------------------
+
+Please change your names and all that in the start of the fles like the mentioned hereafter
+db_config = {
+    'user': 'your_mysql_user',
+    'password': 'your_mysql_password',
+    'host': 'localhost',
+    'database': 'your_mysql_database',
+}
+
+
